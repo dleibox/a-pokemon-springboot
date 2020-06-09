@@ -1,0 +1,25 @@
+app:
+  title: A Pokemon Microservices
+  description: A Spring Boot Pokemon Services
+  version: 1.0.0
+  license:
+    - MIT
+    - url: https://opensource.org/licenses/MIT
+  contact:
+    name: Daniel Lei
+    email: dleibox@gmail.com
+    url: http://dlei.ca
+
+datasource:
+  jdbc-url: jdbc:h2:mem:testdb
+  username: sa
+  password:
+#    pool-size: 30
+
+spring:
+  h2:
+    console:
+      enabled: true
+
+service:
+  base-url: https://pokeapi.co/api/v2
