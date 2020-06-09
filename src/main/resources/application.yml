@@ -20,6 +20,14 @@ spring:
   h2:
     console:
       enabled: true
+      settings:
+        web-allow-others: true
+        
+logging:
+  level:
+    org.springframework: INFO
+    a.springboot.pokemon: DEBUG
+  file: ./log/a.log
 
 service:
   base-url: https://pokeapi.co/api/v2
