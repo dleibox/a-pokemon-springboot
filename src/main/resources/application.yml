@@ -27,7 +27,7 @@ logging:
   level:
     org.springframework: INFO
     a.springboot.pokemon: DEBUG
-  file: ./log/a.log
+  file: /var/tmp/a.log
 
 service:
   base-url: https://pokeapi.co/api/v2
