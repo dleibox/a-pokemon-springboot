@@ -57,7 +57,7 @@ public class APokemonDaoRepo implements APokemonDao {
 			try {
 				String json = new ObjectMapper().writeValueAsString(p);
 				log.info("[ Source Response ] {}", json.length());
-				jdbcTemplate.update("INSERT INTO pokemon_response VALUES (?, ?)", UUID.randomUUID(), json);
+				jdbcTemplate.update("INSERT INTO pokemon_response (uuid,json) VALUES (?, ?)", UUID.randomUUID(), json);
 			} catch (DataAccessException e) {
 //				e.printStackTrace();
 				log.info("[ EX ] {}", e.toString());
@@ -108,8 +108,8 @@ public class APokemonDaoRepo implements APokemonDao {
 			try {
 				String json = new ObjectMapper().writeValueAsString(o);
 				log.info("[ Source Response ] {}", json.length());
-				jdbcTemplate.update("INSERT INTO pokemon VALUES (?, ?, ?, ?)", UUID.randomUUID(), o.getId(),
-						o.getName(), json);
+				jdbcTemplate.update("INSERT INTO pokemon (uuid,id,name,json) VALUES (?, ?, ?, ?)", UUID.randomUUID(),
+						o.getId(), o.getName(), json);
 			} catch (DataAccessException e) {
 //				e.printStackTrace();
 				log.info("[ EX ] {}", e.toString());
@@ -160,8 +160,8 @@ public class APokemonDaoRepo implements APokemonDao {
 			try {
 				String json = new ObjectMapper().writeValueAsString(o);
 				log.info("[ Source Response ] {}", json.length());
-				jdbcTemplate.update(
-						"INSERT INTO ability VALUES (?, ?, ?, ?)", UUID.randomUUID(), o.getId(), o.getName(), json);
+				jdbcTemplate.update("INSERT INTO ability (uuid,id,name,json) VALUES (?, ?, ?, ?)", UUID.randomUUID(),
+						o.getId(), o.getName(), json);
 			} catch (DataAccessException e) {
 //				e.printStackTrace();
 				log.info("[ EX ] {}", e.toString());
