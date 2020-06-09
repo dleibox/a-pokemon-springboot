@@ -9,6 +9,7 @@ This is a Spring Boot Microservices for Pokémon Angular demo. It’s using Spri
 -   Spring Boot 2.3.0 & Java 11
 -   Spring Reactive Web (`WebClient`, `WebFlux`)
 -   `JdbcTemplate`, `HikariDataSource`, H2 Database
+-   `ObjectMapper` JSON String <-> Java Model
 -   Maven
 -   CI/CD (GitHub, Dockerfile/docker-compose, Docker Deployment)
 -   Ubuntu VPS
