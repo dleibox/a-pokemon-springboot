@@ -30,3 +30,5 @@ This is a Spring Boot Microservices for Pokémon Angular demo. It’s using Spri
 -   `@Autowired`
 -   `@Bean`
 -   `@Value`
+-   `@ControllerAdvice`
+-   `@ExceptionHandler`

@@ -1,6 +1,10 @@
 package a.springboot.pokemon.service.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,21 +21,27 @@ import a.springboot.pokemon.service.service.APokemonService;
 @RestController
 public class APokemonController {
 
+	private static final Logger log = LoggerFactory.getLogger(APokemonController.class);
+
 	@Autowired
 	private APokemonService service;
 
 	@GetMapping("/pokemon")
-	public PokemonResponse getAllPokemons() {
-		return this.service.getAllPokemons();
+	public ResponseEntity<PokemonResponse> getAllPokemons() {
+		log.info("[ getAllPokemons ]");
+		return new ResponseEntity<>(this.service.getAllPokemons(), HttpStatus.OK);
 	}
-	
+
 	@GetMapping(path = "/pokemon/{id}")
-	public PokemonDetail getPokemonById(@PathVariable("id") String id) {
-		return this.service.getPokemonById(id);
+	public ResponseEntity<PokemonDetail> getPokemonById(@PathVariable("id") String id) {
+		log.info("[ getPokemonById ] {}", id);
+		return new ResponseEntity<>(this.service.getPokemonById(id), HttpStatus.OK);
 	}
 
 	@GetMapping(path = "/ability/{id}")
-	public AbilityDetail getAbilityById(@PathVariable("id") String id) {
-		return this.service.getAbilityById(id);
+	public ResponseEntity<AbilityDetail> getAbilityById(@PathVariable("id") String id) {
+		log.info("[ getAbilityById ] {}", id);
+		return new ResponseEntity<>(this.service.getAbilityById(id), HttpStatus.OK);
 	}
+
 }

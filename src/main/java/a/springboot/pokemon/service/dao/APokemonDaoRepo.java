@@ -40,10 +40,10 @@ public class APokemonDaoRepo implements APokemonDao {
 				return new ObjectMapper().readValue(resultSet.getString("json"), PokemonResponse.class);
 			} catch (JsonMappingException e) {
 //				e.printStackTrace();
-				log.info("[ EX ] {}", e.toString());
+				log.warn("[ WARN ] {}", e.toString());
 			} catch (JsonProcessingException e) {
 //				e.printStackTrace();
-				log.info("[ EX ] {}", e.toString());
+				log.warn("[ WARN ] {}", e.toString());
 			}
 			return null;
 		}).stream().findFirst().orElse(null);
@@ -60,10 +60,10 @@ public class APokemonDaoRepo implements APokemonDao {
 				jdbcTemplate.update("INSERT INTO pokemon_response (uuid,json) VALUES (?, ?)", UUID.randomUUID(), json);
 			} catch (DataAccessException e) {
 //				e.printStackTrace();
-				log.info("[ EX ] {}", e.toString());
+				log.warn("[ WARN ] {}", e.toString());
 			} catch (JsonProcessingException e) {
 //				e.printStackTrace();
-				log.info("[ EX ] {}", e.toString());
+				log.warn("[ WARN ] {}", e.toString());
 			}
 		}
 		return p;
@@ -78,7 +78,7 @@ public class APokemonDaoRepo implements APokemonDao {
 			try {
 				iid = Integer.parseInt(id);
 			} catch (NumberFormatException e) {
-				log.info("[ EX ] {}", e.toString());
+				log.warn("[ WARN ] {}", e.toString());
 				iid = 0;
 			}
 			o = jdbcTemplate.queryForObject(sql, new Object[] { iid, id }, (resultSet, i) -> {
@@ -86,17 +86,17 @@ public class APokemonDaoRepo implements APokemonDao {
 					return new ObjectMapper().readValue(resultSet.getString("json"), PokemonDetail.class);
 				} catch (JsonMappingException e) {
 //					e.printStackTrace();
-					log.info("[ EX ] {}", e.toString());
+					log.warn("[ WARN ] {}", e.toString());
 				} catch (JsonProcessingException e) {
 //					e.printStackTrace();
-					log.info("[ EX ] {}", e.toString());
+					log.warn("[ WARN ] {}", e.toString());
 				}
 				return null;
 			});
 		} catch (EmptyResultDataAccessException e) {
-			log.info("[ EX ] {}", e.toString());
+			log.warn("[ WARN ] {}", e.toString());
 		} catch (DataIntegrityViolationException e) { // NumberFormatException
-			log.info("[ EX ] {}", e.toString());
+			log.warn("[ WARN ] {}", e.toString());
 		}
 
 		log.info("[ Repo Response ] {}", o);
@@ -112,10 +112,10 @@ public class APokemonDaoRepo implements APokemonDao {
 						o.getId(), o.getName(), json);
 			} catch (DataAccessException e) {
 //				e.printStackTrace();
-				log.info("[ EX ] {}", e.toString());
+				log.warn("[ WARN ] {}", e.toString());
 			} catch (JsonProcessingException e) {
 //				e.printStackTrace();
-				log.info("[ EX ] {}", e.toString());
+				log.warn("[ WARN ] {}", e.toString());
 			}
 		}
 		return o;
@@ -130,7 +130,7 @@ public class APokemonDaoRepo implements APokemonDao {
 			try {
 				iid = Integer.parseInt(id);
 			} catch (NumberFormatException e) {
-				log.info("[ EX ] {}", e.toString());
+				log.warn("[ WARN ] {}", e.toString());
 				iid = 0;
 			}
 			o = jdbcTemplate.queryForObject(sql, new Object[] { iid, id }, (resultSet, i) -> {
@@ -138,17 +138,17 @@ public class APokemonDaoRepo implements APokemonDao {
 					return new ObjectMapper().readValue(resultSet.getString("json"), AbilityDetail.class);
 				} catch (JsonMappingException e) {
 //					e.printStackTrace();
-					log.info("[ EX ] {}", e.toString());
+					log.warn("[ WARN ] {}", e.toString());
 				} catch (JsonProcessingException e) {
 //					e.printStackTrace();
-					log.info("[ EX ] {}", e.toString());
+					log.warn("[ WARN ] {}", e.toString());
 				}
 				return null;
 			});
 		} catch (EmptyResultDataAccessException e) {
-			log.info("[ EX ] {}", e.toString());
+			log.warn("[ WARN ] {}", e.toString());
 		} catch (DataIntegrityViolationException e) { // NumberFormatException
-			log.info("[ EX ] {}", e.toString());
+			log.warn("[ WARN ] {}", e.toString());
 		}
 
 		log.info("[ Repo Response ] {}", o);
@@ -164,10 +164,10 @@ public class APokemonDaoRepo implements APokemonDao {
 						o.getId(), o.getName(), json);
 			} catch (DataAccessException e) {
 //				e.printStackTrace();
-				log.info("[ EX ] {}", e.toString());
+				log.warn("[ WARN ] {}", e.toString());
 			} catch (JsonProcessingException e) {
 //				e.printStackTrace();
-				log.info("[ EX ] {}", e.toString());
+				log.warn("[ WARN ] {}", e.toString());
 			}
 		}
 		return o;
