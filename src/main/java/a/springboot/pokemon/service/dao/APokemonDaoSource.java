@@ -6,11 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunctions;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import a.springboot.pokemon.service.exception.AException;
 import a.springboot.pokemon.service.model.AbilityDetail;
 import a.springboot.pokemon.service.model.PokemonDetail;
 import a.springboot.pokemon.service.model.PokemonResponse;
@@ -34,14 +38,16 @@ public class APokemonDaoSource implements APokemonDao {
 
 	public APokemonDaoSource(@Value("${service.base-url}") String baseURL) {
 		log.info("[ DaoSource ] {}", baseURL);
-		this.webClient = WebClient.builder().baseUrl(baseURL).filter(logFilter()).filters(fltr -> {
-			fltr.add(logRequest());
-			fltr.add(logResponse());
-		}).defaultCookie("cookieKey", "cookieValue")
+		this.webClient = WebClient.builder().baseUrl(baseURL)
 				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 //		        .defaultHeader(HttpHeaders.CONTENT_TYPE, "application/vnd.github.v3+json")
 				.defaultHeader(HttpHeaders.USER_AGENT, "Spring 5 WebClient")
-				.defaultUriVariables(Collections.singletonMap("url", "http://localhost:8080")).build();
+				.defaultUriVariables(Collections.singletonMap("url", "http://localhost:8080"))
+				.filter(ExchangeFilterFunctions.basicAuthentication("username", "token")).filter(logFilter())
+				.filters(fltr -> {
+					fltr.add(logRequest());
+					fltr.add(logResponse());
+				}).defaultCookie("cookieKey", "cookieValue").build();
 	}
 
 	private ExchangeFilterFunction logFilter() {
@@ -74,8 +80,10 @@ public class APokemonDaoSource implements APokemonDao {
 
 	@Override
 	public PokemonResponse selectAllPokemons() { // Object.class
-		return this.webClient.get().uri(ub -> ub.path("/pokemon").queryParam("limit", 1000).build()).retrieve()
-				.bodyToFlux(PokemonResponse.class).blockFirst();
+		return this.webClient.get().uri(ub -> ub.path("/pokemon").queryParam("limit", 1000).build())
+//				.header("Authorization",
+//						"Basic " + Base64Utils.encodeToString(("username" + ":" + "token").getBytes("UTF_8")))
+				.retrieve().bodyToFlux(PokemonResponse.class).blockFirst();
 	}
 
 	// must set static here! otherwise error
@@ -97,7 +105,11 @@ public class APokemonDaoSource implements APokemonDao {
 	@Override
 	public PokemonDetail selectPokemonById(String id) {
 		return this.webClient.get().uri(ub -> ub.path("/pokemon/" + id).build()).retrieve()
-				.bodyToMono(PokemonDetail.class).block();
+				.onStatus(HttpStatus::is4xxClientError,
+						clientResponse -> Mono.error(new AException("A Custom Client Exception")) // MyCustomClientException
+				).onStatus(HttpStatus::is5xxServerError,
+						clientResponse -> Mono.error(new AException("A Custom Server Exception")) // MyCustomServerException
+				).bodyToMono(PokemonDetail.class).block();
 	}
 
 	@Override
